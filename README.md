@@ -1,8 +1,9 @@
 # l-timeweather
 
-Server-authoritative time and weather sync for ESX Legacy. One admin panel controls the
-in-game clock and a smooth, dynamic weather cycle for the whole server, with a live
-forecast of what the weather will change to next.
+Server-authoritative time and weather sync. One admin panel controls the in-game clock
+and a smooth, dynamic weather cycle for the whole server, with a live forecast of what
+the weather will change to next. Framework independent, access is handled via ACE
+permission or an identifier allowlist.
 
 ## Features
 
@@ -28,30 +29,46 @@ forecast of what the weather will change to next.
 
 ## Requirements
 
-- `es_extended`
 - `ox_lib`
 
-No database is used.
+No database is used, no framework is required.
 
 ## Install
 
 1. Download the resource and put the `l-timeweather` folder in your server's `resources`
    directory (rename it to `l-timeweather` if your download added a suffix).
-2. Add it to your `server.cfg`, after `es_extended` and `ox_lib`:
+2. Add it to your `server.cfg`, after `ox_lib`:
 
    ```cfg
-   ensure es_extended
    ensure ox_lib
    ensure l-timeweather
    ```
 
-3. Start the server (or `ensure l-timeweather` / `refresh` from the console).
+3. Give your admins access. Two modes, picked via `PermissionMode` in
+   `server_config.lua`:
+
+   - **`"ace"`** (default): grant the permission in your `server.cfg`:
+
+     ```cfg
+     add_ace group.admin "l-timeweather.admin" allow
+     ```
+
+     Any ACE target works, for example a single player via
+     `add_ace identifier.license:xxxxxxxx "l-timeweather.admin" allow`. The permission
+     name can be changed in `server_config.lua`.
+
+   - **`"identifier"`**: list the allowed players in `server_config.lua` under
+     `AllowedIdentifiers`, e.g. `"discord:123456789012345678"` or `"fivem:1234567"`
+     (any identifier type works, license too).
+
+4. Start the server (or `ensure l-timeweather` / `refresh` from the console).
 
 ## Usage
 
 - `/timeweather` opens the admin panel (in-game only). Everything is done from the panel,
   there are no other commands.
-- Allowed by default for the `admin` and `superadmin` ESX groups; the server console is
+- Allowed for everyone with the `l-timeweather.admin` ACE permission, or in
+  `identifier` mode for everyone on the allowlist (see Install); the server console is
   always allowed.
 
 Panel sections:
@@ -67,8 +84,8 @@ Panel sections:
 
 - `config.lua` (shared): language, time mode and day length, the weather start, cycle
   interval, fade time, the weighted weather pool and the optional transition table.
-- `server_config.lua` (server only, never sent to clients): the ESX admin groups allowed
-  to use the panel.
+- `server_config.lua` (server only, never sent to clients): the permission mode
+  (`ace` or `identifier`), the ACE permission name and the identifier allowlist.
 
 ## Exports (server)
 

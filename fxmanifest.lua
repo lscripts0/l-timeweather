@@ -4,11 +4,10 @@ lua54 'yes'
 
 name 'l-timeweather'
 author 'lscripts'
-description 'Server-time based time sync + smooth dynamic weather sync (ESX)'
-version '1.3.3'
+description 'Server-time based time sync + smooth dynamic weather sync'
+version '1.4.0'
 
 dependencies {
-    'es_extended',
     'ox_lib',
 }
 

@@ -1,5 +1,3 @@
-local ESX = exports.es_extended:getSharedObject()
-
 local timeOffset    = 0
 local timeFrozen    = false
 local frozenMinutes = 0
@@ -41,11 +39,30 @@ local function currentClock()
     return math.floor(totalSec / 3600) % 24, math.floor(totalSec / 60) % 60, math.floor(totalSec) % 60
 end
 
+local allowedIdentifiers
+
+local function identifierAllowed(src)
+    if not allowedIdentifiers then
+        allowedIdentifiers = {}
+        for _, id in ipairs(ServerConfig.AllowedIdentifiers or {}) do
+            allowedIdentifiers[tostring(id):lower()] = true
+        end
+    end
+
+    for i = 0, GetNumPlayerIdentifiers(src) - 1 do
+        local id = GetPlayerIdentifier(src, i)
+        if id and allowedIdentifiers[id:lower()] then return true end
+    end
+
+    return false
+end
+
 local function isAllowed(src)
     if src == 0 then return true end
-    local xPlayer = ESX.GetPlayerFromId(src)
-    if not xPlayer then return false end
-    return ServerConfig.AdminGroups[xPlayer.getGroup()] == true
+    if ServerConfig.PermissionMode == 'identifier' then
+        return identifierAllowed(src)
+    end
+    return IsPlayerAceAllowed(src, ServerConfig.AcePermission)
 end
 
 local function broadcastTime(target)
