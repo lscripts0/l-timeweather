@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>l-timeweather</title>
+    <style>
+      html { font-size: clamp(10px, 1.45vh, 22px); }
+      html, body, #root { margin: 0; height: 100%; width: 100%; overflow: hidden; }
+      body { background: transparent; user-select: none; }
+    </style>
+    <script>
+      (function () {
+        var l = document.createElement('link')
+        l.rel = 'stylesheet'
+        l.href = 'style.css'
+        document.head.appendChild(l)
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
